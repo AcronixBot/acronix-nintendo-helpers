@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "node-fetch": "^2.6.0",
+    "nxapi": "^1.6.1",
+    "uuid": "^9.0.0"
+  },
+  "name": "acronix-nintendo-helper",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Nintendo",
+    "Splatoon3",
+    "NSO",
+    "Coral"
+  ],
+  "author": "Vorniyx",
+  "license": "MIT",
+  "description": ""
+}
