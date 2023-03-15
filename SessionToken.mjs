@@ -1,17 +1,9 @@
-const fs = require('fs');
-const readline = require('readline');
-const fetch = require('node-fetch');
-const crypto = require('crypto');
-const uuidv4 = require('uuid').v4;
+import fetch from 'node-fetch';
+import { randomBytes, createHash } from 'crypto';
 /*-----------*
  | Constants |
  *-----------*/
-
-const version = "1.0.3";
 const clientId = '71b963c1b7b6d119';
-const availableLanguages = ['en-US', 'es-MX', 'fr-CA', 'ja-JP', 'en-GB', 'es-ES', 'fr-FR', 'de-DE', 'it-IT', 'nl-NL', 'ru-RU'];
-
-let userAgent = null;
 
 /*-------------------*
  | Utility functions |
@@ -41,21 +33,12 @@ const to = (promise) => {
     }).catch(err => [err]);
 };
 
-// Additional require for command line only
-const askQuestion = (query) => {
-    const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-    return new Promise(resolve => rl.question(query, ans => {
-        rl.close();
-        resolve(ans);
-    }));
-};
-
 /*-------------------*
  | Package functions |
  *-------------------*/
 
 const generateAuthCodeVerifier = () => {
-    return toUrlSafeBase64Encode(crypto.randomBytes(32));
+    return toUrlSafeBase64Encode(randomBytes(32));
 };
 
 const generateAuthUri = (authCodeVerifier) => {
@@ -68,9 +51,9 @@ const generateAuthUri = (authCodeVerifier) => {
     // Prepare
     const baseUrl = 'https://accounts.nintendo.com/connect/1.0.0/authorize';
 
-    const state = toUrlSafeBase64Encode(crypto.randomBytes(36));
+    const state = toUrlSafeBase64Encode(randomBytes(36));
 
-    const authCvHash = crypto.createHash('sha256');
+    const authCvHash = createHash('sha256');
     authCvHash.update(authCodeVerifier);
     const authCodeChallenge = toUrlSafeBase64Encode(authCvHash.digest());
 
@@ -153,69 +136,9 @@ const getSessionToken = async (sessionTokenCode, authCodeVerifier) => {
 
 };
 
-
-
-
-/*--------------*
- | Command line |
- *--------------*/
-
-(async () => {
-
-    // Check if the script was called directly and hasn't been imported using require()
-    if (require.main !== module || !process || !process.argv || !process.argv[0] || !process.argv[1]) { return 0; }
-
-    try {
-
-        // Init
-        console.log(`splatnet2-cookie-node version ${version}\n----------`);
-
-        // Language
-        let userLangInput = await askQuestion(`Input a language from the following list: (Default: en-GB)
-  Games purchased in North America:                    en-US, es-MX, fr-CA
-  Games purchased in Japan:                            ja-JP
-  Games purchased in Europe, Australia or New Zealand: en-GB, es-ES, fr-FR, de-DE, it-IT, nl-NL, ru-RU\n`);
-        if (userLangInput === '') { userLangInput = 'en-GB'; }
-        else if (availableLanguages.indexOf(userLangInput) === -1) {
-            console.log('----------\nInvalid language. Exiting');
-            return 0;
-        }
-
-        // Generate auth uri
-        let authCodeVerifier = generateAuthCodeVerifier();
-        let url = generateAuthUri(authCodeVerifier);
-        console.log(`Copy and paste the following URL to your browser to login:\n----------\n${url}\n----------`);
-        try {
-            fs.writeFileSync('authURI.txt', url);
-            console.log('The URL has been saved to authURI.txt for ease of access');
-        } catch (writeErr) {
-            console.error('Error trying to write the URL to authURI.txt');
-        }
-
-        // Redirect URL / session token code
-        let redirectUrlInput = await askQuestion('----------\nInput the redirect URL obtained by right clicking on "Select this person" and pressing "Copy link address":\n');
-        console.log('----------');
-        let sessionTokenCode = getSessionTokenCode(redirectUrlInput);
-
-        // Run
-        let sessionToken = await getSessionToken(sessionTokenCode, authCodeVerifier);
-        if (sessionToken) {
-            console.log(`sessionToken generated:\n----------\n${sessionToken}\n----------`)
-            try {
-                fs.writeFileSync('sessionToken.txt', sessionToken);
-                console.log('The sessionToken has been saved to sessionToken.txt for ease of access');
-            } catch (writeErr) {
-                console.error('Error trying to write the sessionToken to sessionToken.txt');
-            }
-        }
-
-
-    } catch (err) {
-        console.error(err);
-        return 0;
-    }
-    return 1;
-
-})().catch((error) => {
-    console.error(error);
-});
+export {
+    generateAuthCodeVerifier,
+    generateAuthUri,
+    getSessionTokenCode,
+    getSessionToken
+}

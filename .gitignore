@@ -1,5 +1,7 @@
-authURI.txt
-sessionToken.txt
+data_authURI.txt
+data_sessionToken.txt
+data_accessToken.txt
+data_bulletToken.txt
 package-lock.json
 node_modules
 HowToGenerate.md

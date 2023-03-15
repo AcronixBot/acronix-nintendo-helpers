@@ -14,8 +14,10 @@ Start it with
 node index.js
 ```
 
-Big thanks also to [nxapi](https://github.com/samuelthomas2774/nxapi), without this package none of this planned would be possible.
+Big thanks also to [nxapi](https://github.com/samuelthomas2774/nxapi), without this package none of this would be possible so easy.
 
 Overview of the files that will be created
 - `authURI.txt` -> containing the url from which you get the redirect url 
 - `sessionToken.txt` -> containing the Session Token
+- `accessToken.txt` -> containing the accessToken (also known as gtoken or webservice token)
+- `bulletToken.txt` -> containing the BulletToken
