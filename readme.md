@@ -21,3 +21,5 @@ Overview of the files that will be created
 - `sessionToken.txt` -> containing the Session Token
 - `accessToken.txt` -> containing the accessToken (also known as gtoken or webservice token)
 - `bulletToken.txt` -> containing the BulletToken
+
+If you want to know more about how it all works, please read on here: [https://splatnet3-scraper.readthedocs.io/en/latest/index.html](https://splatnet3-scraper.readthedocs.io/en/latest/index.html)
