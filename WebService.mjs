@@ -5,7 +5,7 @@ import {version, name, github} from'./package.json'
 
 export const UserAgent = `${name}/${version} (+${github.url})`
 export const SPLATNET3_WEB_SERVICE_ID = "4834290508791808";
-export const WebViewVersion = '3.0.0-6049221b';
+export const WebViewVersion = '3.0.0-0742bda0';
 export const BaseURL = 'https://api.lp1.av5ja.srv.nintendo.net/api/bullet_tokens'
 export const baseAcceptLanguage = 'en-US'
 /**
