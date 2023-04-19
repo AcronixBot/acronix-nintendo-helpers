@@ -5,3 +5,4 @@ data_bulletToken.txt
 package-lock.json
 node_modules
 HowToGenerate.md
+/dist

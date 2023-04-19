@@ -1,18 +1,19 @@
+//@ts-ignore
 import CoralApi from 'nxapi/coral'
 import { addUserAgent } from 'nxapi'
-import {version, name, github} from'./package.json'
+//@ts-ignore
+import * as pck from '../package.json' assert  {
+    type: 'json',
+    integrity: 'sha384-ABC123'
+};
 
-
-export const UserAgent = `${name}/${version} (+${github.url})`
+export const UserAgent = `${pck.name}/${pck.version} (+${pck.github})`
 export const SPLATNET3_WEB_SERVICE_ID = "4834290508791808";
-export const WebViewVersion = '3.0.0-0742bda0';
+export const WebViewVersion = '3.0.0-6049221b';
 export const BaseURL = 'https://api.lp1.av5ja.srv.nintendo.net/api/bullet_tokens'
 export const baseAcceptLanguage = 'en-US'
-/**
- * returns the accessToken
- * @param {String} sessionToken 
- */
-export async function createCoral(sessionToken) {
+
+export async function createCoral(sessionToken: string): Promise<string> {
     addUserAgent(UserAgent);
 
     let { data } = await CoralApi.createWithSessionToken(sessionToken);
@@ -24,12 +25,13 @@ export async function createCoral(sessionToken) {
     return accessToken
 }
 
-/**
- * 
- * @param {String} sessionToken 
- * @param {String} WebViewVersion 
- */
-export async function getBulletToken(sessionToken, WebViewVersion) {
+type BulletTokenResponse = {
+    bulletToken: string,
+    lang: string,
+    is_noe_country: string
+}
+
+export async function getBulletToken(sessionToken: string, WebViewVersion: string): Promise<BulletTokenResponse> {
     let response = await fetch(BaseURL, {
         method: 'POST',
         headers: {
@@ -40,7 +42,7 @@ export async function getBulletToken(sessionToken, WebViewVersion) {
         }
     })
 
-    if(!response.ok) {
+    if (!response.ok) {
         throw new Error(`Invalid bullet token response code: ${response.status}`);
     }
 
@@ -48,4 +50,3 @@ export async function getBulletToken(sessionToken, WebViewVersion) {
 
     return BulletTokenData;
 }
-

@@ -1,41 +1,40 @@
 import { writeFileSync } from 'fs';
 import { createInterface } from 'readline';
-import { generateAuthCodeVerifier, generateAuthUri, getSessionToken, getSessionTokenCode } from './SessionToken.mjs';
-import { createCoral, getBulletToken, WebViewVersion } from './WebService.mjs';
-/*-----------*
- | Constants |
- *-----------*/
+import { generateAuthCodeVerifier, generateAuthUri, getSessionToken, getSessionTokenCode } from './SessionToken.js';
+import { createCoral, getBulletToken, WebViewVersion } from './WebService.js';
 
-const version = "1.0.3";
+const version = "1.0.4";
 const availableLanguages = ['en-US', 'es-MX', 'fr-CA', 'ja-JP', 'en-GB', 'es-ES', 'fr-FR', 'de-DE', 'it-IT', 'nl-NL', 'ru-RU'];
 
 // Additional require for command line only
-const askQuestion = (query) => {
+// const askQuestion = (query: string) => {
+//     const rl = createInterface({ input: process.stdin, output: process.stdout });
+//     return new Promise(resolve => rl.question(query, ans => {
+//         rl.close();
+//         resolve(ans);
+//     }));
+// };
+async function askQuestion(query: string): Promise<string> {
     const rl = createInterface({ input: process.stdin, output: process.stdout });
     return new Promise(resolve => rl.question(query, ans => {
         rl.close();
         resolve(ans);
     }));
-};
+}
 
-
-
-/*--------------*
- | Command line |
- *--------------*/
 
 (async () => {
 
     try {
 
         // Init
-        console.log(`splatnet2-cookie-node version ${version}\n----------`);
+        console.log(`acronix-nintendo-helper version ${version}\n----------`);
 
         // Language
         let userLangInput = await askQuestion(`Input a language from the following list: (Default: en-GB)
   Games purchased in North America:                    en-US, es-MX, fr-CA
   Games purchased in Japan:                            ja-JP
-  Games purchased in Europe, Australia or New Zealand: en-GB, es-ES, fr-FR, de-DE, it-IT, nl-NL, ru-RU\n`);
+  Games purchased in Europe, Australia or New Zealand: en-GB, es-ES, fr-FR, de-DE, it-IT, nl-NL, ru-RU\n`) as string;
         if (userLangInput === '') { userLangInput = 'en-GB'; }
         else if (availableLanguages.indexOf(userLangInput) === -1) {
             console.log('----------\nInvalid language. Exiting');
@@ -54,7 +53,7 @@ const askQuestion = (query) => {
         }
 
         // Redirect URL / session token code
-        let redirectUrlInput = await askQuestion('----------\nInput the redirect URL obtained by right clicking on "Select this person" and pressing "Copy link address":\n');
+        let redirectUrlInput = await askQuestion('----------\nInput the redirect URL obtained by right clicking on "Select this person" and pressing "Copy link address":\n') as string;
         console.log('----------');
         let sessionTokenCode = getSessionTokenCode(redirectUrlInput);
 

@@ -1,22 +1,16 @@
 import fetch from 'node-fetch';
-import { randomBytes, createHash } from 'crypto';
-/*-----------*
- | Constants |
- *-----------*/
-const clientId = '71b963c1b7b6d119';
+import { randomBytes, createHash, BinaryLike } from 'crypto';
 
-/*-------------------*
- | Utility functions |
- *-------------------*/
+export const clientId = '71b963c1b7b6d119';
 
-const toUrlSafeBase64Encode = (val) => {
+export const toUrlSafeBase64Encode = (val: Buffer) => {
     return val.toString('base64')
         .replace(/\+/g, '-')
         .replace(/\//g, '_')
         .replace(/=+$/, '');
 };
 
-const buildQuery = (params) => {
+export const buildQuery = (params: { [x: string]: any; hasOwnProperty: (arg0: string) => any; }) => {
     let r = '';
     for (let i in params) {
         if (params.hasOwnProperty(i)) {
@@ -27,21 +21,20 @@ const buildQuery = (params) => {
     return r;
 };
 
-const to = (promise) => {
-    return Promise.resolve(promise).then(data => {
+export async function to(promise: any) {
+    try {
+        const data = await Promise.resolve(promise);
         return [null, data];
-    }).catch(err => [err]);
-};
+    } catch (err) {
+        return [err];
+    }
+}
 
-/*-------------------*
- | Package functions |
- *-------------------*/
-
-const generateAuthCodeVerifier = () => {
+export const generateAuthCodeVerifier = () => {
     return toUrlSafeBase64Encode(randomBytes(32));
 };
 
-const generateAuthUri = (authCodeVerifier) => {
+export const generateAuthUri = (authCodeVerifier: BinaryLike) => {
 
     // Check parameter
     if (typeof authCodeVerifier === 'undefined') {
@@ -74,7 +67,7 @@ const generateAuthUri = (authCodeVerifier) => {
 
 };
 
-const getSessionTokenCode = (redirectUrl) => {
+export const getSessionTokenCode = (redirectUrl: string) => {
     let arr = redirectUrl.match(/session_token_code=(.*)&/);
     if (!arr || !arr[1]) {
         throw {
@@ -85,7 +78,7 @@ const getSessionTokenCode = (redirectUrl) => {
     return arr[1];
 };
 
-const getSessionToken = async (sessionTokenCode, authCodeVerifier) => {
+export const getSessionToken = async (sessionTokenCode: string, authCodeVerifier: string): Promise<string> => {
 
     // ---- STEP 1 ----
     // Get session_token from Nintendo
@@ -135,10 +128,3 @@ const getSessionToken = async (sessionTokenCode, authCodeVerifier) => {
     return step1Json.session_token;
 
 };
-
-export {
-    generateAuthCodeVerifier,
-    generateAuthUri,
-    getSessionTokenCode,
-    getSessionToken
-}
