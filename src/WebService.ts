@@ -4,12 +4,11 @@ import { addUserAgent } from 'nxapi'
 //@ts-ignore
 import * as pck from '../package.json' assert  {
     type: 'json',
-    integrity: 'sha384-ABC123'
 };
 
 export const UserAgent = `${pck.name}/${pck.version} (+${pck.github})`
 export const SPLATNET3_WEB_SERVICE_ID = "4834290508791808";
-export const WebViewVersion = '3.0.0-6049221b';
+export const WebViewVersion = '4.0.0-355675c2';
 export const BaseURL = 'https://api.lp1.av5ja.srv.nintendo.net/api/bullet_tokens'
 export const baseAcceptLanguage = 'en-US'
 
