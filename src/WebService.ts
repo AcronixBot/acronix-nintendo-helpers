@@ -8,7 +8,7 @@ import * as pck from '../package.json' assert  {
 
 export const UserAgent = `${pck.name}/${pck.version} (+${pck.github})`
 export const SPLATNET3_WEB_SERVICE_ID = "4834290508791808";
-export const WebViewVersion = '4.0.0-355675c2';
+export const WebViewVersion = '6.0.0-eb33aadc';
 export const BaseURL = 'https://api.lp1.av5ja.srv.nintendo.net/api/bullet_tokens'
 export const baseAcceptLanguage = 'en-US'
 
