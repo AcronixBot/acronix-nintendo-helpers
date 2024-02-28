@@ -1,6 +1,4 @@
 The basic building block of this code is from [TomikaArome](https://github.com/TomikaArome/splatnet2-cookie-node) so most of the credit goes to this user. 
-However, I have modified the code so that it only generates the SessionToken at the current moment. 
-In the future, it should also be possible to generate the WebServiceToken and the BulletToken for the SplatNet3 app.
 
 
 To execute the code, min. Node.js `19.0.0` must be installed.
